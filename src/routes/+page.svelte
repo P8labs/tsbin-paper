@@ -4,12 +4,12 @@
 </script>
 
 <svelte:head>
-  <title>tsbin paper — Markdown in. Paper out.</title>
+  <title>tsbin paper - Markdown in. Paper out.</title>
   <meta
     name="description"
     content="tsbin paper is a tiny tool to turn Markdown into beautiful images or publish it permanently on IPFS. Part of the tsbin.tech tool collection by P8labs."
   />
-  <meta property="og:title" content="tsbin paper — Markdown in. Paper out." />
+  <meta property="og:title" content="tsbin paper - Markdown in. Paper out." />
   <meta
     property="og:description"
     content="tsbin paper is a tiny tool to turn Markdown into beautiful images or publish it permanently on IPFS. Part of the tsbin.tech tool collection by P8labs."
@@ -17,7 +17,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://paper.tsbin.tech" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="tsbin paper — Markdown in. Paper out." />
+  <meta name="twitter:title" content="tsbin paper - Markdown in. Paper out." />
   <meta
     name="twitter:description"
     content="tsbin paper is a tiny tool to turn Markdown into beautiful images or publish it permanently on IPFS. Part of the tsbin.tech tool collection by P8labs."

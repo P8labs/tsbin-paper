@@ -176,7 +176,7 @@ console.log("Beautiful code");
 </script>
 
 <svelte:head>
-  <title>Editor — tsbin paper</title>
+  <title>Editor - tsbin paper</title>
   {#if getGoogleFontsUrl()}
     <link rel="stylesheet" href={getGoogleFontsUrl()} />
   {/if}

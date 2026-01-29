@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-  <title>Terms — tsbin paper</title>
+  <title>Terms - tsbin paper</title>
   <meta name="description" content="Terms of use for paper.tsbin.tech" />
 </svelte:head>
 

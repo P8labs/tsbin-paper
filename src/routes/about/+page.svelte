@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-  <title>About — tsbin paper</title>
+  <title>About - tsbin paper</title>
   <meta
     name="description"
     content="About tsbin paper: a tiny tool that turns Markdown into something you can share."
