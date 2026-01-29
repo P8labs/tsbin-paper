@@ -20,12 +20,10 @@
         Terms
       </a>
       <a
-        href="https://github.com/PriyanshuPz/tsbin-paper"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-text-secondary no-underline hover:text-text-primary transition-colors"
+        href="/editor"
+        class="text-text- no-underline hover:text-text-primary transition-colors"
       >
-        GitHub
+        Editor
       </a>
     </div>
   </div>

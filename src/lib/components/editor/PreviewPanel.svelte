@@ -95,6 +95,8 @@
     padding: 1rem;
     border-radius: 0.5rem;
     overflow-x: auto;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
     margin-bottom: 1rem;
     line-height: 1.5;
   }

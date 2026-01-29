@@ -1,5 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   import MarkdownIt from "markdown-it";
   import hljs from "highlight.js";
   import markdownItHighlightJs from "markdown-it-highlightjs";
@@ -17,6 +19,9 @@
     createHTMLExport,
     downloadFile,
   } from "$lib/utils/exportUtils";
+  import { publishToIPFS } from "$lib/utils/ipfs";
+  import { authStore, type User } from "$lib/stores/auth";
+  import { papersStore } from "$lib/stores/papers";
 
   const md = new MarkdownIt({
     html: true,
@@ -50,6 +55,8 @@ console.log("Beautiful code");
   let previewFont = $state("serif");
   let includeWatermark = $state(true);
   let isLoaded = $state(false);
+  let user = $state<User | null>(null);
+  let currentPaperId = $state<string | null>(null);
 
   let showPublishModal = $state(false);
   let showAlert = $state(false);
@@ -60,6 +67,30 @@ console.log("Beautiful code");
   let textarea = $state<HTMLTextAreaElement>();
 
   let previewHtml = $derived(md.render(markdown));
+
+  onMount(() => {
+    authStore.init();
+
+    const unsubscribeAuth = authStore.subscribe((state) => {
+      user = state.user;
+    });
+
+    const unsubscribePapers = papersStore.subscribe((state) => {
+      if (state.currentPaper && !currentPaperId) {
+        // Load paper into editor
+        markdown = state.currentPaper.content;
+        previewTheme = state.currentPaper.theme;
+        previewFont = state.currentPaper.font;
+        includeWatermark = state.currentPaper.watermark;
+        currentPaperId = state.currentPaper.$id;
+      }
+    });
+
+    return () => {
+      unsubscribeAuth();
+      unsubscribePapers();
+    };
+  });
 
   // Load from localStorage on mount
   $effect(() => {
@@ -79,7 +110,6 @@ console.log("Beautiful code");
     }
   });
 
-  // Save markdown to localStorage
   $effect(() => {
     if (browser && isLoaded) {
       localStorage.setItem(STORAGE_KEY, markdown);
@@ -173,6 +203,94 @@ console.log("Beautiful code");
     downloadFile(markdown, "text/markdown", "paper.md");
     showAlertDialog("Markdown exported successfully!", "success");
   }
+
+  function handleLogin() {
+    authStore.loginWithGoogle();
+  }
+
+  function handleNewPaper() {
+    if (currentPaperId) {
+      showConfirm(
+        "Start a new paper? Any unsaved changes will be lost.",
+        () => {
+          markdown = DEFAULT_CONTENT;
+          currentPaperId = null;
+          papersStore.clearCurrentPaper();
+        },
+      );
+    } else {
+      markdown = DEFAULT_CONTENT;
+    }
+  }
+
+  function handleProfileClick() {
+    goto("/profile");
+  }
+
+  async function handleSaveDraft(title: string) {
+    if (!user) return;
+
+    try {
+      if (currentPaperId) {
+        await papersStore.updatePaper(currentPaperId, {
+          title,
+          content: markdown,
+          htmlContent: previewHtml,
+          theme: previewTheme,
+          font: previewFont,
+          watermark: includeWatermark,
+          status: "draft",
+          userId: user.$id,
+        });
+        showAlertDialog("Draft updated successfully!", "success");
+      } else {
+        const paper = await papersStore.createPaper({
+          title,
+          content: markdown,
+          htmlContent: previewHtml,
+          theme: previewTheme,
+          font: previewFont,
+          watermark: includeWatermark,
+          status: "draft",
+          userId: user.$id,
+        });
+        currentPaperId = paper.$id;
+        showAlertDialog("Draft saved successfully!", "success");
+      }
+    } catch (error: any) {
+      throw new Error(error.message || "Failed to save draft");
+    }
+  }
+
+  async function handlePublishPaper(title: string) {
+    if (!user) return;
+
+    try {
+      const theme = getThemeById(previewTheme);
+      if (!theme) throw new Error("Invalid theme");
+
+      const html = createHTMLExport(previewHtml, previewFont, theme);
+
+      // Call function which will upload to IPFS and save to database
+      const { cid, gateway, paperId } = await publishToIPFS(
+        html,
+        title,
+        user.$id,
+        {
+          content: markdown,
+          theme: previewTheme,
+          font: previewFont,
+          watermark: includeWatermark,
+          ...(currentPaperId && { paperId: currentPaperId }),
+        },
+      );
+
+      currentPaperId = paperId;
+      showAlertDialog("Paper published to IPFS successfully!", "success");
+    } catch (error: any) {
+      throw new Error(error.message || "Failed to publish");
+    }
+  }
 </script>
 
 <svelte:head>
@@ -191,6 +309,7 @@ console.log("Beautiful code");
     {previewFont}
     {previewTheme}
     {includeWatermark}
+    {user}
     onFontChange={(font) => {
       previewFont = font;
     }}
@@ -204,6 +323,9 @@ console.log("Beautiful code");
     onExportHTML={handleExportHTML}
     onExportMarkdown={handleExportMarkdown}
     onPublish={() => (showPublishModal = true)}
+    onNewPaper={handleNewPaper}
+    onProfileClick={handleProfileClick}
+    onLogin={handleLogin}
   />
 
   <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
@@ -224,7 +346,10 @@ console.log("Beautiful code");
 
   <PublishModal
     show={showPublishModal}
+    {user}
     onClose={() => (showPublishModal = false)}
+    onSaveDraft={handleSaveDraft}
+    onPublish={handlePublishPaper}
   />
 
   <Alert

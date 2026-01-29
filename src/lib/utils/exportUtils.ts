@@ -16,14 +16,25 @@ export async function exportToPNG(elementId: string, backgroundColor: string) {
   const element = document.getElementById(elementId);
   if (!element) return;
 
+  // Temporarily fix overflow for code blocks during export
+  const codeBlocks = element.querySelectorAll("pre");
+  const originalStyles: { element: HTMLElement; overflow: string }[] = [];
+
+  codeBlocks.forEach((pre) => {
+    const htmlPre = pre as HTMLElement;
+    originalStyles.push({ element: htmlPre, overflow: htmlPre.style.overflow });
+    htmlPre.style.overflow = "visible";
+    htmlPre.style.whiteSpace = "pre-wrap";
+    htmlPre.style.wordBreak = "break-word";
+  });
+
   try {
-    // Use lower scale to avoid canvas size limits
-    // Most browsers have a max canvas size around 32767x32767 pixels
     const canvas = await html2canvas(element, {
       backgroundColor,
       scale: 1,
-      windowWidth: element.scrollWidth,
-      windowHeight: element.scrollHeight,
+      logging: false,
+      allowTaint: true,
+      useCORS: true,
     });
 
     const link = document.createElement("a");
@@ -33,6 +44,13 @@ export async function exportToPNG(elementId: string, backgroundColor: string) {
   } catch (err) {
     console.error("Export failed:", err);
     throw err;
+  } finally {
+    // Restore original styles
+    originalStyles.forEach(({ element, overflow }) => {
+      element.style.overflow = overflow;
+      element.style.whiteSpace = "";
+      element.style.wordBreak = "";
+    });
   }
 }
 

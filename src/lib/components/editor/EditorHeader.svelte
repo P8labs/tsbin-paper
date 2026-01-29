@@ -2,12 +2,14 @@
   import { themes } from "$lib/config/themes";
   import { fonts } from "$lib/config/fonts";
   import ExportDropdown from "./ExportDropdown.svelte";
-  import { ChevronDown } from "lucide-svelte";
+  import { ChevronDown, User, FilePlus } from "lucide-svelte";
+  import { authStore, type User as AuthUser } from "$lib/stores/auth";
 
   interface Props {
     previewFont: string;
     previewTheme: string;
     includeWatermark: boolean;
+    user: AuthUser | null;
     onFontChange: (font: string) => void;
     onThemeChange: (theme: string) => void;
     onWatermarkToggle: (value: boolean) => void;
@@ -15,12 +17,16 @@
     onExportHTML: () => void;
     onExportMarkdown: () => void;
     onPublish: () => void;
+    onNewPaper: () => void;
+    onProfileClick: () => void;
+    onLogin: () => void;
   }
 
   let {
     previewFont,
     previewTheme,
     includeWatermark,
+    user,
     onFontChange,
     onThemeChange,
     onWatermarkToggle,
@@ -28,10 +34,19 @@
     onExportHTML,
     onExportMarkdown,
     onPublish,
+    onNewPaper,
+    onProfileClick,
+    onLogin,
   }: Props = $props();
 
   let showThemeDropdown = $state(false);
   let showFontDropdown = $state(false);
+  let showProfileDropdown = $state(false);
+
+  function handleLogout() {
+    authStore.logout();
+    showProfileDropdown = false;
+  }
 </script>
 
 <header
@@ -45,7 +60,6 @@
   </a>
 
   <div class="flex items-center gap-2">
-    <!-- Watermark Toggle -->
     <label
       class="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-border rounded bg-bg cursor-pointer hover:bg-surface transition-colors"
     >
@@ -59,7 +73,6 @@
       <span class="text-text-primary">Watermark</span>
     </label>
 
-    <!-- Theme Dropdown -->
     <div class="relative">
       <button
         onclick={() => (showThemeDropdown = !showThemeDropdown)}
@@ -94,7 +107,6 @@
       {/if}
     </div>
 
-    <!-- Font Dropdown -->
     <div class="relative">
       <button
         onclick={() => (showFontDropdown = !showFontDropdown)}
@@ -129,16 +141,64 @@
       {/if}
     </div>
 
-    <!-- Export Dropdown -->
     <ExportDropdown {onExportPNG} {onExportHTML} {onExportMarkdown} />
 
-    <!-- Publish Button -->
-    <button
-      onclick={onPublish}
-      class="px-4 py-1.5 text-xs bg-text-primary text-bg rounded hover:opacity-80 transition-opacity"
-    >
-      Publish
-    </button>
+    {#if user}
+      <button
+        onclick={onNewPaper}
+        class="px-3 py-1.5 text-xs border border-border rounded bg-bg text-text-primary hover:bg-surface flex items-center gap-1.5 transition-colors"
+        title="New Paper"
+      >
+        <FilePlus size={14} />
+        New
+      </button>
+
+      <div class="relative">
+        <button
+          onclick={() => (showProfileDropdown = !showProfileDropdown)}
+          class="px-3 py-1.5 text-xs border border-border rounded bg-bg text-text-primary hover:bg-surface flex items-center gap-1.5 transition-colors"
+        >
+          <User size={14} />
+          {user.name.split(" ")[0]}
+          <ChevronDown size={14} />
+        </button>
+        {#if showProfileDropdown}
+          <div
+            class="absolute right-0 mt-1 bg-bg border border-border rounded shadow-lg z-10 min-w-40"
+          >
+            <button
+              onclick={() => {
+                onProfileClick();
+                showProfileDropdown = false;
+              }}
+              class="block w-full text-left px-4 py-2 text-xs hover:bg-surface transition-colors text-text-primary"
+            >
+              My Papers
+            </button>
+            <button
+              onclick={handleLogout}
+              class="block w-full text-left px-4 py-2 text-xs hover:bg-surface transition-colors text-text-primary border-t border-border"
+            >
+              Logout
+            </button>
+          </div>
+        {/if}
+      </div>
+
+      <button
+        onclick={onPublish}
+        class="px-4 py-1.5 text-xs bg-text-primary text-bg rounded hover:opacity-80 transition-opacity"
+      >
+        Publish
+      </button>
+    {:else}
+      <button
+        onclick={onLogin}
+        class="px-4 py-1.5 text-xs bg-text-primary text-bg rounded hover:opacity-80 transition-opacity"
+      >
+        Login to Publish
+      </button>
+    {/if}
   </div>
 </header>
 
@@ -148,6 +208,7 @@
     if (!target.closest(".relative")) {
       showThemeDropdown = false;
       showFontDropdown = false;
+      showProfileDropdown = false;
     }
   }}
 />

@@ -1,0 +1,17 @@
+{
+  "name": "upload-to-ipfs",
+  "version": "1.0.0",
+  "description": "Upload HTML to IPFS via Pinata and save to database",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "node-appwrite": "^13.0.0",
+    "pinata": "^1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}
