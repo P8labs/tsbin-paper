@@ -8,8 +8,8 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "node-appwrite": "^13.0.0",
-    "pinata": "^1.0.0"
+    "node-appwrite": "^21.1.0",
+    "pinata": "^2.5.3"
   },
   "devDependencies": {
     "prettier": "^3.0.0"

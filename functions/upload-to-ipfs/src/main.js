@@ -17,6 +17,9 @@ export default async ({ req, res, log, error }) => {
   });
 
   try {
+    if (req.method === "GET") {
+      return res.text("Hello, World!");
+    }
     const userId = req.headers["x-appwrite-user-id"];
     if (!userId) {
       return res.json({ success: false, message: "Unauthorized" }, 401);

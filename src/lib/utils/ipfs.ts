@@ -23,11 +23,8 @@ export async function publishToIPFS(
 
     const response = await functions.createExecution({
       functionId: FUNCTION_ID,
-      headers: {
-        "x-appwrite-user-id": userId,
-      },
       method: ExecutionMethod.POST,
-      async: true,
+      async: false,
       body: JSON.stringify({
         html,
         title,
