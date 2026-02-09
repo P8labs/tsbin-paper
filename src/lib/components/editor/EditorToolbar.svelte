@@ -66,29 +66,23 @@
   ];
 </script>
 
-<div
-  class="flex items-center gap-0.5 p-2 border-b border-border-subtle flex-wrap"
->
+<div class="editor-toolbar">
   {#each tools as tool, i}
     {#if tool.separator && i > 0}
-      <div class="w-px h-6 bg-border mx-1"></div>
+      <div class="toolbar-divider"></div>
     {/if}
     {@const Icon = tool.icon}
     <button
       onclick={() => onInsert(tool.before, tool.after)}
-      class="p-2 hover:bg-surface rounded transition-colors text-text-secondary hover:text-text-primary"
+      class="toolbar-btn"
       title={tool.title}
     >
       <Icon size={16} />
     </button>
   {/each}
-  <div class="flex-1"></div>
-  <div class="w-px h-6 bg-border mx-1"></div>
-  <button
-    onclick={onClear}
-    class="p-2 hover:bg-surface rounded transition-colors text-text-secondary hover:text-text-primary"
-    title="Clear All"
-  >
+  <div style="flex: 1;"></div>
+  <div class="toolbar-divider"></div>
+  <button onclick={onClear} class="toolbar-btn" title="Clear All">
     <Trash2 size={16} />
   </button>
 </div>

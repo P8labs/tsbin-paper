@@ -40,35 +40,24 @@
   <div
     role="button"
     tabindex="0"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    class="modal-overlay"
     onkeydown={handleDialogKeydown}
     onclick={handleCancel}
   >
-    <div
-      class="bg-bg border border-border rounded-lg shadow-2xl max-w-md w-full p-6 animate-in"
-      role="alertdialog"
-      aria-modal="true"
-    >
-      <!-- onclick={(e) => e.stopPropagation()} -->
-      <h3 class="text-lg font-semibold text-text-primary mb-3">
+    <div class="modal-content" role="alertdialog" aria-modal="true">
+      <h3 class="modal-header">
         {title}
       </h3>
 
-      <p class="text-sm text-text-secondary leading-relaxed mb-6">
+      <p class="modal-body">
         {message}
       </p>
 
-      <div class="flex justify-end gap-3">
-        <button
-          onclick={handleCancel}
-          class="px-4 py-2 text-sm border border-border rounded hover:bg-surface transition-colors text-text-primary"
-        >
+      <div class="modal-footer">
+        <button onclick={handleCancel} class="editor-btn">
           {cancelText}
         </button>
-        <button
-          onclick={handleConfirm}
-          class="px-4 py-2 text-sm bg-text-primary text-bg rounded hover:opacity-80 transition-opacity"
-        >
+        <button onclick={handleConfirm} class="editor-btn editor-btn-primary">
           {confirmText}
         </button>
       </div>
@@ -77,18 +66,10 @@
 {/if}
 
 <style>
-  .animate-in {
-    animation: scale-in 0.15s ease-out;
-  }
-
-  @keyframes scale-in {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .modal-body {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #666);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
   }
 </style>

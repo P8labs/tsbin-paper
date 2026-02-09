@@ -13,16 +13,16 @@
     $props();
 </script>
 
-<div class="flex-1 flex flex-col bg-surface overflow-auto">
-  <div class="flex-1 flex items-center justify-center p-4">
+<div class="preview-panel">
+  <div class="preview-container">
     <div
       id="preview-card"
-      class="w-full max-w-2xl p-12 transition-all theme-{previewTheme}"
+      class="preview-card theme-{previewTheme}"
       style="background-color: {getThemeById(previewTheme)
         ?.backgroundColor}; color: {getThemeById(previewTheme)
         ?.textColor}; font-family: {getFontFamily(previewFont)};"
     >
-      <article class="prose max-w-none">
+      <article class="prose">
         {@html previewHtml}
       </article>
     </div>

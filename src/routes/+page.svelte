@@ -1,131 +1,153 @@
-<script>
-  import Footer from "$lib/components/Footer.svelte";
-  import Navbar from "$lib/components/Navbar.svelte";
-</script>
-
 <svelte:head>
   <title>tsbin paper - Markdown in. Paper out.</title>
   <meta
     name="description"
-    content="tsbin paper is a tiny tool to turn Markdown into beautiful images or publish it permanently on IPFS. Part of the tsbin.tech tool collection by P8labs."
-  />
-  <meta property="og:title" content="tsbin paper - Markdown in. Paper out." />
-  <meta
-    property="og:description"
-    content="tsbin paper is a tiny tool to turn Markdown into beautiful images or publish it permanently on IPFS. Part of the tsbin.tech tool collection by P8labs."
-  />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://paper.tsbin.tech" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="tsbin paper - Markdown in. Paper out." />
-  <meta
-    name="twitter:description"
-    content="tsbin paper is a tiny tool to turn Markdown into beautiful images or publish it permanently on IPFS. Part of the tsbin.tech tool collection by P8labs."
+    content="A tiny tool that turns Markdown into something you can share. You paste. We render. You export."
   />
 </svelte:head>
 
-<Navbar />
-
-<div
-  class="flex items-center justify-center min-h-[calc(100vh-8rem)] py-12 px-4"
->
-  <div class="max-w-3xl w-full">
-    <div class="text-center mb-16">
-      <h1
-        class="text-6xl md:text-8xl font-semibold mb-6 tracking-tight text-text-primary leading-none"
-      >
-        tsbin paper
-      </h1>
-      <p class="text-xl md:text-2xl text-text-secondary font-light mb-8">
-        Markdown in. Paper out.
-      </p>
-      <p
-        class="text-base md:text-lg leading-relaxed text-text-secondary max-w-xl mx-auto"
-      >
-        Paste Markdown. Get a beautiful paper.<br />
-        Export as an image or publish it forever.
-      </p>
-    </div>
-
-    <div
-      class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
-    >
-      <a
-        href="/editor"
-        class="inline-block px-12 py-4 bg-text-primary text-bg hover:opacity-80 transition-opacity no-underline font-medium rounded-lg text-base"
-      >
-        Open Editor
-      </a>
-      <a
-        href="/about"
-        class="inline-block px-8 py-4 text-text-secondary hover:text-text-primary no-underline transition-colors text-base"
-      >
-        Learn more
-      </a>
-    </div>
-
-    <div class="pt-12 mt-8">
-      <div class="flex items-center justify-center mb-12">
-        <div
-          class="h-px w-16 bg-linear-to-r from-transparent via-border to-transparent"
-        ></div>
-        <div class="mx-4 flex gap-1.5">
-          <div class="w-1 h-1 rounded-full bg-border"></div>
-          <div class="w-1 h-1 rounded-full bg-border"></div>
-          <div class="w-1 h-1 rounded-full bg-border"></div>
-        </div>
-        <div
-          class="h-px w-16 bg-linear-to-r from-transparent via-border to-transparent"
-        ></div>
+<main>
+  <div class="container">
+    <!-- Hero -->
+    <div class="hero">
+      <h1>PAPER</h1>
+      <div class="subtitle">Markdown in. Paper out.</div>
+      <div class="supporting">
+        <p>Paste Markdown. Get a beautiful paper.</p>
+        <p>Export as image. Publish forever.</p>
       </div>
-
-      <div class="max-w-2xl mx-auto space-y-6">
-        <div class="grid sm:grid-cols-2 gap-6 text-sm">
-          <div class="space-y-2">
-            <h3 class="font-medium text-text-primary">Guest Mode</h3>
-            <p class="text-text-secondary leading-relaxed">
-              Nothing is stored. Your work stays in your browser until you
-              choose to export or publish.
-            </p>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-medium text-text-primary">Accounts</h3>
-            <p class="text-text-secondary leading-relaxed">
-              Optional. Only needed if you want to save drafts or publish to
-              IPFS.
-            </p>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-medium text-text-primary">IPFS Publishing</h3>
-            <p class="text-text-secondary leading-relaxed">
-              Published content is public and immutable. Cannot be deleted.
-            </p>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-medium text-text-primary">Open Source</h3>
-            <p class="text-text-secondary leading-relaxed">
-              Fully transparent. <a
-                href="https://github.com/PriyanshuPz/tsbin-paper"
-                target="_blank"
-                rel="noopener"
-                class="underline hover:text-text-primary transition-colors"
-                >View on GitHub</a
-              >
-            </p>
-          </div>
-        </div>
-
-        <div class="text-center pt-4">
-          <a
-            href="/terms"
-            class="text-sm text-text-secondary hover:text-text-primary underline transition-colors"
-          >
-            Read full terms & privacy policy
-          </a>
-        </div>
+      <div class="button-group">
+        <a href="/editor" class="button">Open Editor</a>
+        <a
+          href="https://github.com/P8labs/tsbin-paper"
+          class="button secondary"
+          target="_blank"
+          rel="noopener">View Source</a
+        >
       </div>
     </div>
+
+    <!-- What is Paper? -->
+    <section>
+      <h2>What is Paper?</h2>
+      <p>
+        Paper is a tiny tool that turns Markdown into something you can share.
+      </p>
+      <p>
+        Built for moments when you need to present text beautifully, export it
+        as an image, or publish it permanently to the web.
+      </p>
+      <p>You paste. We render. You export.</p>
+    </section>
+
+    <!-- How It Works -->
+    <section>
+      <h2>How It Works</h2>
+      <p>
+        Write or paste Markdown in the editor. Paper renders it into a clean,
+        formatted document.
+      </p>
+      <p>Choose your font, theme, and layout. Then export or publish.</p>
+      <ul>
+        <li>Export as high-quality PNG or SVG</li>
+        <li>Publish to IPFS for permanent, decentralized storage</li>
+        <li>Share with a simple link</li>
+      </ul>
+    </section>
+
+    <!-- Features -->
+    <section>
+      <h2>Features</h2>
+      <ul>
+        <li>Guest mode — nothing stored on our servers</li>
+        <li>Optional accounts for saving drafts</li>
+        <li>Multiple export formats (PNG, SVG)</li>
+        <li>IPFS publishing for permanence</li>
+        <li>Custom fonts and themes</li>
+        <li>Zero tracking of your content</li>
+      </ul>
+      <p>Simple interface. Clear behavior.</p>
+    </section>
+
+    <!-- Privacy -->
+    <section>
+      <h2>Privacy</h2>
+      <p>Everything runs in your browser in guest mode.</p>
+      <p>
+        Your content stays local until you choose to publish.<br />
+        We don't track what you write or export.<br />
+        Published content goes to IPFS — a public, decentralized network.
+      </p>
+      <p><a href="/terms">Read full terms and privacy policy →</a></p>
+    </section>
+
+    <!-- Open Source -->
+    <section>
+      <h2>Open Source</h2>
+      <p>
+        Paper is fully open-source and available on GitHub. Inspect the code,
+        contribute improvements, or deploy your own instance.
+      </p>
+      <p>
+        <a
+          href="https://github.com/P8labs/tsbin-paper"
+          target="_blank"
+          rel="noopener">View source code →</a
+        >
+      </p>
+    </section>
+
+    <!-- More Tools -->
+    <section>
+      <h2>More Tools</h2>
+      <div class="tool-grid">
+        <div class="tool">
+          <h3>
+            <a href="https://tsbin.tech" target="_blank" rel="noopener"
+              >tsbin.tech</a
+            >
+          </h3>
+          <p>
+            A secure, temporary file and text sharing platform designed with
+            privacy in mind. Share sensitive information knowing it will
+            automatically expire and be permanently deleted.
+          </p>
+        </div>
+        <div class="tool">
+          <h3>
+            <a href="https://mail.tsbin.tech" target="_blank" rel="noopener"
+              >mail.tsbin.tech</a
+            >
+          </h3>
+          <p>
+            A temporary email service that allows you to create disposable email
+            addresses without registration. Perfect for testing, signing up for
+            services, or avoiding spam in your primary inbox.
+          </p>
+        </div>
+        <div class="tool">
+          <h3>
+            <a href="https://locam.tsbin.tech" target="_blank" rel="noopener"
+              >locam.tsbin.tech</a
+            >
+          </h3>
+          <p>
+            Private QR scanning and camera utility. Runs entirely on your
+            device. No accounts. No uploads. No tracking.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Preview -->
+    <section>
+      <h2>About</h2>
+      <p>
+        Paper is part of the tsbin.tech tool collection, built with a focus on
+        simplicity and transparency.
+      </p>
+      <p>No growth tactics. No engagement loops. Just a tool.</p>
+      <p><a href="/about">Learn more →</a></p>
+    </section>
   </div>
-</div>
-
-<Footer />
+</main>

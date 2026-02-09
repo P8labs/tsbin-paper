@@ -35,11 +35,23 @@
   <title>Authenticating...</title>
 </svelte:head>
 
-<div class="flex items-center justify-center min-h-screen bg-bg">
-  <div class="text-center">
-    <div
-      class="w-12 h-12 border-4 border-text-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"
-    ></div>
-    <p class="text-text-secondary">Completing login...</p>
+<main>
+  <div
+    style="display: flex; align-items: center; justify-content: center; min-height: 50vh; text-align: center;"
+  >
+    <div>
+      <div
+        style="width: 48px; height: 48px; border: 4px solid var(--text); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"
+      ></div>
+      <p style="opacity: 0.75;">Completing login...</p>
+    </div>
   </div>
-</div>
+</main>
+
+<style>
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

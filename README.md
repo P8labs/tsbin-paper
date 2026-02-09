@@ -14,7 +14,7 @@ A minimal tool to turn Markdown into beautiful images or publish it permanently 
 - Export as PNG image
 - Export as standalone HTML
 - Auto-save to localStorage
-- Publish to IPFS (coming soon)
+- Publish to IPFS
 
 ## Quick Start
 

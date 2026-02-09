@@ -33,21 +33,21 @@
   <div
     role="button"
     tabindex="0"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    class="modal-overlay"
     onclick={close}
     onkeydown={handleDialogKeydown}
   >
     <div
       tabindex="0"
-      class="bg-bg border border-border rounded-lg shadow-2xl max-w-md w-full p-6 animate-in"
+      class="modal-content alert"
       role="alertdialog"
       aria-modal="true"
     >
-      <div class="flex items-start gap-4">
-        <div class="shrink-0 mt-0.5">
+      <div class="alert-content">
+        <div class="alert-icon">
           {#if type === "error"}
             <svg
-              class="w-6 h-6 text-red-500"
+              class="icon-error"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -61,7 +61,7 @@
             </svg>
           {:else if type === "warning"}
             <svg
-              class="w-6 h-6 text-yellow-500"
+              class="icon-warning"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -75,7 +75,7 @@
             </svg>
           {:else if type === "success"}
             <svg
-              class="w-6 h-6 text-green-500"
+              class="icon-success"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -89,7 +89,7 @@
             </svg>
           {:else}
             <svg
-              class="w-6 h-6 text-blue-500"
+              class="icon-info"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -104,23 +104,24 @@
           {/if}
         </div>
 
-        <div class="flex-1">
-          <p class="text-sm text-text-primary leading-relaxed">{message}</p>
+        <div class="alert-message">
+          <p>{message}</p>
         </div>
       </div>
 
-      <div class="mt-6 flex justify-end gap-2">
+      <div class="modal-footer">
         {#if actionText && actionUrl}
           <a
             href={actionUrl}
             target="_blank"
             rel="noopener noreferrer"
             onclick={close}
-            class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-2"
+            class="editor-btn editor-btn-primary"
+            style="display: inline-flex; align-items: center; gap: 0.5rem;"
           >
             {actionText}
             <svg
-              class="w-4 h-4"
+              style="width: 1rem; height: 1rem;"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -134,10 +135,7 @@
             </svg>
           </a>
         {/if}
-        <button
-          onclick={close}
-          class="px-4 py-2 text-sm bg-text-primary text-bg rounded hover:opacity-80 transition-opacity"
-        >
+        <button onclick={close} class="editor-btn editor-btn-primary">
           OK
         </button>
       </div>
@@ -146,18 +144,45 @@
 {/if}
 
 <style>
-  .animate-in {
-    animation: scale-in 0.15s ease-out;
+  .alert-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
-  @keyframes scale-in {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .alert-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .alert-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .icon-error {
+    color: #ef4444;
+  }
+
+  .icon-warning {
+    color: #eab308;
+  }
+
+  .icon-success {
+    color: #22c55e;
+  }
+
+  .icon-info {
+    color: #3b82f6;
+  }
+
+  .alert-message {
+    flex: 1;
+  }
+
+  .alert-message p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text);
   }
 </style>

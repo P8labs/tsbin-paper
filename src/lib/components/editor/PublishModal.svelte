@@ -89,7 +89,7 @@
 
 {#if show}
   <div
-    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    class="modal-overlay"
     onclick={handleBackdropClick}
     onkeydown={handleBackdropKeydown}
     role="button"
@@ -97,7 +97,7 @@
     aria-label="Close modal"
   >
     <div
-      class="bg-bg border border-border rounded-lg p-8 max-w-md w-full mx-4"
+      class="modal-content"
       onclick={(e) => e.stopPropagation()}
       onkeydown={(e) => e.key === "Escape" && resetOnClose()}
       role="dialog"
@@ -105,10 +105,7 @@
       tabindex="0"
       aria-labelledby="modal-title"
     >
-      <h2
-        id="modal-title"
-        class="text-2xl font-semibold mb-2 text-text-primary"
-      >
+      <h2 id="modal-title" class="modal-header">
         {#if user}
           {currentTitle ? currentTitle : "Save or Publish Paper"}
         {:else}
@@ -117,45 +114,40 @@
       </h2>
 
       {#if !user}
-        <p class="text-text-secondary mb-6">
+        <p class="modal-body">
           Please login with Google to save and publish your papers.
         </p>
         <button
           onclick={resetOnClose}
-          class="w-full px-4 py-2 bg-text-primary text-bg rounded hover:opacity-80"
+          class="editor-btn editor-btn-primary"
+          style="width: 100%; justify-content: center;"
         >
           Close
         </button>
       {:else}
-        <p class="text-text-secondary mb-6 text-sm">
-          Save as draft or publish to IPFS permanently
-        </p>
+        <p class="modal-body">Save as draft or publish to IPFS permanently</p>
 
-        <div class="mb-6">
-          <label
-            for="paper-title"
-            class="block text-sm font-medium text-text-primary mb-2"
-          >
-            Paper Title
-          </label>
+        <div class="form-group">
+          <label for="paper-title" class="form-label"> Paper Title </label>
           <input
             id="paper-title"
             type="text"
             bind:value={title}
             placeholder="Enter a title for your paper"
-            class="w-full px-3 py-2 bg-surface border border-border rounded text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-text-primary"
+            class="form-input"
             disabled={saving || publishing}
           />
           {#if error}
-            <p class="text-red-600 text-xs mt-1">{error}</p>
+            <p class="form-error">{error}</p>
           {/if}
         </div>
 
-        <div class="flex gap-3">
+        <div style="display: flex; gap: 0.75rem;">
           <button
             onclick={handleSaveDraft}
             disabled={saving || publishing}
-            class="flex-1 px-4 py-2 border border-border bg-bg text-text-primary rounded hover:bg-surface disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            class="editor-btn"
+            style="flex: 1; justify-content: center;"
           >
             {#if saving}
               <Loader size={16} class="animate-spin" />
@@ -167,7 +159,8 @@
           <button
             onclick={handlePublish}
             disabled={saving || publishing}
-            class="flex-1 px-4 py-2 bg-text-primary text-bg rounded hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            class="editor-btn editor-btn-primary"
+            style="flex: 1; justify-content: center;"
           >
             {#if publishing}
               <Loader size={16} class="animate-spin" />
@@ -181,7 +174,8 @@
         <button
           onclick={resetOnClose}
           disabled={saving || publishing}
-          class="w-full mt-3 px-4 py-2 text-text-secondary hover:text-text-primary text-sm disabled:opacity-50"
+          class="editor-btn"
+          style="width: 100%; margin-top: 0.75rem; color: var(--text-secondary); justify-content: center;"
         >
           Cancel
         </button>

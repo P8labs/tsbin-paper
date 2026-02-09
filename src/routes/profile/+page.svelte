@@ -4,10 +4,9 @@
   import { authStore } from "$lib/stores/auth";
   import { papersStore, type Paper } from "$lib/stores/papers";
   import { Trash2, Edit, ExternalLink, FileText, Loader } from "lucide-svelte";
-  import Footer from "$lib/components/Footer.svelte";
-  import Navbar from "$lib/components/Navbar.svelte";
   import ConfirmDialog from "$lib/components/editor/ConfirmDialog.svelte";
   import moment from "moment";
+  import "./profile.css";
 
   let user = $state<any>(null);
   let papers = $state<Paper[]>([]);
@@ -68,103 +67,86 @@
   <title>My Papers - tsbin paper</title>
 </svelte:head>
 
-<Navbar />
+<div class="bg-effect"></div>
 
-<div class="min-h-screen bg-bg py-12 px-4">
-  <div class="max-w-5xl mx-auto">
-    <div class="mb-8">
-      <h1 class="text-4xl font-semibold text-text-primary mb-2">My Papers</h1>
-      <p class="text-text-secondary">Manage your published and draft papers</p>
+<header class="profile-header-nav">
+  <a href="/" class="profile-header-logo">PAPER</a>
+  <nav class="profile-header-links">
+    <a href="/editor">editor</a>
+    <a href="/about">about</a>
+    <a href="/terms">terms</a>
+    <a
+      href="https://github.com/P8labs/tsbin-paper"
+      target="_blank"
+      rel="noopener">github</a
+    >
+  </nav>
+</header>
+
+<main>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h1>My Papers</h1>
+      <p>Manage your published and draft papers</p>
     </div>
 
-    <div class="flex gap-2 mb-6 border-b border-border">
+    <div class="filter-tabs">
       <button
         onclick={() => (filter = "all")}
-        class="px-4 py-2 text-sm transition-colors"
-        class:border-b-2={filter === "all"}
-        class:border-text-primary={filter === "all"}
-        class:text-text-primary={filter === "all"}
-        class:text-text-secondary={filter !== "all"}
+        class="filter-tab"
+        class:active={filter === "all"}
       >
         All ({papers.length})
       </button>
       <button
         onclick={() => (filter = "published")}
-        class="px-4 py-2 text-sm transition-colors"
-        class:border-b-2={filter === "published"}
-        class:border-text-primary={filter === "published"}
-        class:text-text-primary={filter === "published"}
-        class:text-text-secondary={filter !== "published"}
+        class="filter-tab"
+        class:active={filter === "published"}
       >
         Published ({papers.filter((p) => p.status === "published").length})
       </button>
       <button
         onclick={() => (filter = "draft")}
-        class="px-4 py-2 text-sm transition-colors"
-        class:border-b-2={filter === "draft"}
-        class:border-text-primary={filter === "draft"}
-        class:text-text-primary={filter === "draft"}
-        class:text-text-secondary={filter !== "draft"}
+        class="filter-tab"
+        class:active={filter === "draft"}
       >
         Drafts ({papers.filter((p) => p.status === "draft").length})
       </button>
     </div>
 
     {#if loading}
-      <div class="flex items-center justify-center py-16">
-        <Loader class="animate-spin text-text-secondary" size={32} />
+      <div class="loading-state">
+        <Loader size={32} style="animation: spin 1s linear infinite;" />
       </div>
     {:else if filteredPapers.length === 0}
-      <div class="text-center py-16">
-        <FileText size={48} class="mx-auto text-text-secondary mb-4" />
-        <p class="text-text-secondary mb-4">
+      <div class="empty-state">
+        <FileText size={48} class="empty-state-icon" />
+        <p>
           {filter === "all"
             ? "No papers yet"
             : filter === "published"
               ? "No published papers"
               : "No draft papers"}
         </p>
-        <a
-          href="/editor"
-          class="inline-block px-6 py-2 bg-text-primary text-bg rounded hover:opacity-80 transition-opacity"
-        >
-          Create Your First Paper
-        </a>
+        <a href="/editor" class="button"> Create Your First Paper </a>
       </div>
     {:else}
-      <div class="space-y-4">
+      <div class="paper-list">
         {#each filteredPapers as paper (paper.$id)}
-          <div
-            class="border hover:border-border rounded-lg p-4 sm:p-6 bg-surface border-border-subtle transition-colors"
-          >
-            <div
-              class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
-            >
-              <div class="flex-1">
-                <h3
-                  class="text-lg sm:text-xl font-semibold text-text-primary mb-2"
-                >
-                  {paper.title}
-                </h3>
-                <div
-                  class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-text-secondary mb-3"
-                >
+          <div class="paper-card">
+            <div class="paper-card-content">
+              <div class="paper-card-main">
+                <h3>{paper.title}</h3>
+                <div class="paper-meta">
                   <span
-                    class="px-2 py-1 rounded font-medium"
-                    class:bg-green-100={paper.status === "published"}
-                    class:text-green-800={paper.status === "published"}
-                    class:bg-yellow-100={paper.status === "draft"}
-                    class:text-yellow-800={paper.status === "draft"}
+                    class="status-badge"
+                    class:published={paper.status === "published"}
+                    class:draft={paper.status === "draft"}
                   >
                     {paper.status === "published" ? "Published" : "Draft"}
                   </span>
-                  <span class="flex items-center gap-1">
-                    <svg
-                      class="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                  <span class="paper-meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -174,13 +156,8 @@
                     </svg>
                     {moment(paper.createdAt).format("MMM D, YYYY")}
                   </span>
-                  <span class="flex items-center gap-1">
-                    <svg
-                      class="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                  <span class="paper-meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -190,13 +167,8 @@
                     </svg>
                     {paper.theme}
                   </span>
-                  <span class="flex items-center gap-1">
-                    <svg
-                      class="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                  <span class="paper-meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -207,9 +179,8 @@
                     {paper.font}
                   </span>
                   {#if paper.watermark}
-                    <span class="flex items-center gap-1">
+                    <span class="paper-meta-item">
                       <svg
-                        class="w-3 h-3"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -226,29 +197,24 @@
                   {/if}
                 </div>
                 {#if paper.content}
-                  <p class="text-sm text-text-secondary mb-3 line-clamp-2">
+                  <p class="paper-excerpt">
                     {paper.content.substring(0, 150)}{paper.content.length > 150
                       ? "..."
                       : ""}
                   </p>
                 {/if}
                 {#if paper.ipfsCid}
-                  <div class="bg-bg rounded-lg p-3 mt-3 border border-border">
-                    <div class="flex flex-col gap-2">
-                      <div class="flex items-center gap-2 text-xs">
-                        <span class="text-text-secondary font-semibold"
-                          >IPFS CID:</span
-                        >
-                        <code
-                          class="font-mono text-text-primary bg-surface px-2 py-0.5 rounded text-[10px]"
-                          >{paper.ipfsCid}</code
-                        >
+                  <div class="ipfs-info">
+                    <div class="ipfs-info-content">
+                      <div class="ipfs-cid-row">
+                        <span class="ipfs-cid-label">IPFS CID:</span>
+                        <code class="ipfs-cid-code">{paper.ipfsCid}</code>
                       </div>
                       <a
                         href={paper.ipfsGateway}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 text-xs text-blue-600 hover:text-blue-800 font-medium"
+                        class="ipfs-link"
                       >
                         <ExternalLink size={14} />
                         View Published Paper on IPFS
@@ -256,24 +222,22 @@
                     </div>
                   </div>
                 {/if}
-                <div
-                  class="flex items-center gap-2 text-xs text-text-secondary mt-3"
-                >
+                <div class="paper-updated">
                   <span>Last updated: {moment(paper.updatedAt).fromNow()}</span>
                 </div>
               </div>
-              <div class="flex sm:flex-col items-center gap-2">
+              <div class="paper-actions">
                 {#if paper.status === "draft"}
                   <button
                     onclick={() => handleEdit(paper)}
-                    class="p-2 text-text-secondary hover:text-text-primary hover:bg-bg rounded transition-colors"
+                    class="paper-action-btn"
                     title="Edit"
                   >
                     <Edit size={18} />
                   </button>
                   <button
                     onclick={() => confirmDelete(paper)}
-                    class="p-2 text-text-secondary hover:text-red-600 hover:bg-bg rounded transition-colors"
+                    class="paper-action-btn delete"
                     title="Delete"
                   >
                     <Trash2 size={18} />
@@ -283,7 +247,7 @@
                     href={paper.ipfsGateway}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="p-2 text-text-secondary hover:text-blue-600 hover:bg-bg rounded transition-colors"
+                    class="paper-action-btn view"
                     title="View Published"
                   >
                     <ExternalLink size={18} />
@@ -296,18 +260,16 @@
       </div>
     {/if}
   </div>
-</div>
 
-<ConfirmDialog
-  bind:show={showConfirmDialog}
-  title="Delete Paper"
-  message="Are you sure you want to delete '{paperToDelete?.title}'? This action cannot be undone."
-  confirmText="Delete"
-  cancelText="Cancel"
-  onConfirm={handleDelete}
-  onCancel={() => {
-    paperToDelete = null;
-  }}
-/>
-
-<Footer />
+  <ConfirmDialog
+    bind:show={showConfirmDialog}
+    title="Delete Paper"
+    message="Are you sure you want to delete '{paperToDelete?.title}'? This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    onConfirm={handleDelete}
+    onCancel={() => {
+      paperToDelete = null;
+    }}
+  />
+</main>

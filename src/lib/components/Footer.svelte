@@ -66,7 +66,7 @@
       >
       <span class="text-border">•</span>
       <a
-        href="https://github.com/PriyanshuPz/tsbin-paper"
+        href="https://github.com/P8labs/tsbin-paper"
         target="_blank"
         rel="noopener"
         class="text-text-secondary hover:text-text-primary no-underline transition-colors"

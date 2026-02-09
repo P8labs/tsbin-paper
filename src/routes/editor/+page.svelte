@@ -1,11 +1,11 @@
 <script lang="ts">
+  import "./editor.css";
   import { browser } from "$app/environment";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import MarkdownIt from "markdown-it";
   import hljs from "highlight.js";
   import markdownItHighlightJs from "markdown-it-highlightjs";
-  import Footer from "$lib/components/Footer.svelte";
   import EditorHeader from "$lib/components/editor/EditorHeader.svelte";
   import EditorPanel from "$lib/components/editor/EditorPanel.svelte";
   import PreviewPanel from "$lib/components/editor/PreviewPanel.svelte";
@@ -77,11 +77,7 @@ console.log("Beautiful code");
   let showRestoreDialog = $state(false);
   let restorableState: EditorState | null = null;
 
-  let previewHtml = $state(md.render(markdown));
-
-  $effect(() => {
-    previewHtml = md.render(markdown);
-  });
+  let previewHtml = $derived(md.render(markdown));
 
   onMount(() => {
     authStore.init();
@@ -411,7 +407,7 @@ console.log("Beautiful code");
   />
 </svelte:head>
 
-<div class="flex flex-col h-screen">
+<div class="editor-container">
   <EditorHeader
     {previewFont}
     {previewTheme}
@@ -435,7 +431,7 @@ console.log("Beautiful code");
     onLogin={handleLogin}
   />
 
-  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+  <main class="editor-panels">
     <EditorPanel
       bind:markdown
       bind:textarea
@@ -496,5 +492,3 @@ console.log("Beautiful code");
     onCancel={discardPreviousSession}
   />
 </div>
-
-<Footer />

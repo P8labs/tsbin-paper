@@ -48,85 +48,73 @@
   }
 </script>
 
-<header
-  class="border-b border-border bg-bg flex items-center justify-between px-2 sm:px-4 py-1.5 sm:py-2"
->
-  <a
-    href="/"
-    class="text-base sm:text-lg font-semibold no-underline text-text-primary hover:opacity-70 transition-opacity"
-  >
-    paper
-  </a>
+<header class="editor-header">
+  <a href="/" class="editor-header-logo">PAPER</a>
 
-  <div class="flex items-center gap-1 sm:gap-2">
-    <div class="relative">
+  <div class="editor-header-controls">
+    <div class="dropdown">
       <button
         onclick={() => (showStylesDropdown = !showStylesDropdown)}
-        class="px-2 sm:px-3 py-1 sm:py-1.5 text-xs border border-border rounded bg-bg text-text-primary hover:bg-surface flex items-center gap-1 transition-colors"
+        class="editor-btn"
         title="Customize styles"
       >
         <Settings size={14} />
-        <span class="hidden sm:inline">Styles</span>
+        <span style="display: none;">Styles</span>
         <ChevronDown size={14} />
       </button>
       {#if showStylesDropdown}
-        <div
-          class="absolute right-0 mt-1 bg-bg border border-border rounded shadow-lg z-10 min-w-48"
-        >
-          <div class="px-3 py-2 border-b border-border">
-            <p class="text-xs font-semibold text-text-secondary mb-2">Theme</p>
-            <div class="space-y-1">
+        <div class="dropdown-menu" style="min-width: 14rem;">
+          <div class="dropdown-section">
+            <p class="dropdown-label">Theme</p>
+            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
               {#each themes as theme}
                 <button
                   onclick={() => {
                     onThemeChange(theme.id);
                   }}
-                  class="block w-full text-left px-3 py-1.5 text-xs rounded hover:bg-surface transition-colors text-text-primary"
-                  class:bg-surface={previewTheme === theme.id}
-                  class:font-semibold={previewTheme === theme.id}
+                  class="dropdown-item"
+                  class:active={previewTheme === theme.id}
                 >
                   {theme.label}
                   {#if previewTheme === theme.id}
-                    <span class="float-right">✓</span>
+                    <span class="dropdown-checkmark">✓</span>
                   {/if}
                 </button>
               {/each}
             </div>
           </div>
 
-          <div class="px-3 py-2 border-b border-border">
-            <p class="text-xs font-semibold text-text-secondary mb-2">Font</p>
-            <div class="space-y-1">
+          <div class="dropdown-section">
+            <p class="dropdown-label">Font</p>
+            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
               {#each fonts as font}
                 <button
                   onclick={() => {
                     onFontChange(font.id);
                   }}
-                  class="block w-full text-left px-3 py-1.5 text-xs rounded hover:bg-surface transition-colors text-text-primary"
-                  class:bg-surface={previewFont === font.id}
-                  class:font-semibold={previewFont === font.id}
+                  class="dropdown-item"
+                  class:active={previewFont === font.id}
                 >
                   {font.label}
                   {#if previewFont === font.id}
-                    <span class="float-right">✓</span>
+                    <span class="dropdown-checkmark">✓</span>
                   {/if}
                 </button>
               {/each}
             </div>
           </div>
 
-          <!-- Watermark Toggle -->
-          <div class="px-3 py-2">
-            <label class="flex items-center justify-between cursor-pointer">
-              <span class="text-xs font-semibold text-text-secondary"
-                >Watermark</span
-              >
+          <div class="dropdown-section">
+            <label
+              style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;"
+            >
+              <span class="dropdown-label" style="margin: 0;">Watermark</span>
               <input
                 type="checkbox"
                 checked={includeWatermark}
                 onchange={(e) =>
                   onWatermarkToggle((e.target as HTMLInputElement).checked)}
-                class="w-4 h-4 rounded border-border cursor-pointer accent-text-primary"
+                style="width: 1rem; height: 1rem; cursor: pointer;"
               />
             </label>
           </div>
@@ -137,65 +125,59 @@
     <ExportDropdown {onExportPNG} {onExportHTML} {onExportMarkdown} />
 
     {#if user}
-      <button
-        onclick={onNewPaper}
-        class="px-2 sm:px-3 py-1 sm:py-1.5 text-xs border border-border rounded bg-bg text-text-primary hover:bg-surface flex items-center gap-1 sm:gap-1.5 transition-colors"
-        title="New Paper"
-      >
+      <button onclick={onNewPaper} class="editor-btn" title="New Paper">
         <FilePlus size={14} />
-        <span class="hidden sm:inline">New</span>
+        <span style="display: none;">New</span>
       </button>
 
-      <button
-        onclick={onPublish}
-        class="px-3 sm:px-4 py-1 sm:py-1.5 text-xs bg-text-primary text-bg rounded hover:opacity-80 transition-opacity font-medium"
-      >
+      <button onclick={onPublish} class="editor-btn editor-btn-primary">
         Publish
       </button>
 
-      <div class="relative">
+      <div class="dropdown">
         <button
           onclick={() => (showProfileDropdown = !showProfileDropdown)}
-          class="p-1.5 sm:p-2 border border-border rounded bg-bg text-text-primary hover:bg-surface transition-colors"
+          class="editor-btn"
           title="Profile"
+          style="padding: 0.5rem;"
         >
           <User size={16} />
         </button>
         {#if showProfileDropdown}
-          <div
-            class="absolute right-0 mt-1 bg-bg border border-border rounded shadow-lg z-10 min-w-40"
-          >
-            <div class="px-4 py-2 border-b border-border">
-              <p class="text-xs font-semibold text-text-primary truncate">
+          <div class="dropdown-menu" style="min-width: 11rem;">
+            <div class="dropdown-section">
+              <p
+                style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+              >
                 {user.name}
               </p>
-              <p class="text-xs text-text-secondary truncate">{user.email}</p>
+              <p
+                style="font-size: 0.75rem; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+              >
+                {user.email}
+              </p>
             </div>
-            <button
-              onclick={() => {
-                onProfileClick();
-                showProfileDropdown = false;
-              }}
-              class="block w-full text-left px-4 py-2 text-xs hover:bg-surface transition-colors text-text-primary"
-            >
-              My Papers
-            </button>
-            <button
-              onclick={handleLogout}
-              class="block w-full text-left px-4 py-2 text-xs hover:bg-surface transition-colors text-text-primary border-t border-border"
-            >
-              Logout
-            </button>
+            <div class="dropdown-section">
+              <button
+                onclick={() => {
+                  onProfileClick();
+                  showProfileDropdown = false;
+                }}
+                class="dropdown-item"
+              >
+                My Papers
+              </button>
+              <button onclick={handleLogout} class="dropdown-item">
+                Logout
+              </button>
+            </div>
           </div>
         {/if}
       </div>
     {:else}
-      <button
-        onclick={onLogin}
-        class="px-3 sm:px-4 py-1 sm:py-1.5 text-xs bg-text-primary text-bg rounded hover:opacity-80 transition-opacity font-medium"
-      >
-        <span class="hidden sm:inline">Login to Publish</span>
-        <span class="sm:hidden">Login</span>
+      <button onclick={onLogin} class="editor-btn-primary editor-btn">
+        <span style="display: none;">Login to Publish</span>
+        <span>Login</span>
       </button>
     {/if}
   </div>
@@ -204,9 +186,23 @@
 <svelte:window
   onclick={(e) => {
     const target = e.target as HTMLElement;
-    if (!target.closest(".relative")) {
+    if (!target.closest(".dropdown")) {
       showStylesDropdown = false;
       showProfileDropdown = false;
     }
   }}
 />
+
+<style>
+  @media (min-width: 640px) {
+    .editor-header-controls .editor-btn span {
+      display: inline !important;
+    }
+    .editor-btn-primary span:first-child {
+      display: inline !important;
+    }
+    .editor-btn-primary span:last-child {
+      display: none !important;
+    }
+  }
+</style>
