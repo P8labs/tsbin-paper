@@ -147,12 +147,12 @@
           <div class="dropdown-menu" style="min-width: 11rem;">
             <div class="dropdown-section">
               <p
-                style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                style="font-size: 0.875rem; margin-bottom: 0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
               >
                 {user.name}
               </p>
               <p
-                style="font-size: 0.75rem; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                style="font-size: 0.75rem;  margin-bottom: 0; opacity: 0.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
               >
                 {user.email}
               </p>

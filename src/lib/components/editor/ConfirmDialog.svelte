@@ -49,9 +49,9 @@
         {title}
       </h3>
 
-      <p class="modal-body">
-        {message}
-      </p>
+      <div class="modal-body">
+        <p style="margin: 0;">{message}</p>
+      </div>
 
       <div class="modal-footer">
         <button onclick={handleCancel} class="editor-btn">
@@ -64,12 +64,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-  .modal-body {
-    font-size: 0.875rem;
-    color: var(--text-secondary, #666);
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
-  }
-</style>

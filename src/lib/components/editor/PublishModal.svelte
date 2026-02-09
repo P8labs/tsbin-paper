@@ -114,40 +114,43 @@
       </h2>
 
       {#if !user}
-        <p class="modal-body">
-          Please login with Google to save and publish your papers.
-        </p>
-        <button
-          onclick={resetOnClose}
-          class="editor-btn editor-btn-primary"
-          style="width: 100%; justify-content: center;"
-        >
-          Close
-        </button>
+        <div class="modal-body">
+          <p style="margin: 0;">
+            Please login with Google to save and publish your papers.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button onclick={resetOnClose} class="editor-btn editor-btn-primary">
+            Close
+          </button>
+        </div>
       {:else}
-        <p class="modal-body">Save as draft or publish to IPFS permanently</p>
+        <div class="modal-body">
+          <p style="margin-bottom: 1.5rem;">
+            Save as draft or publish to IPFS permanently
+          </p>
 
-        <div class="form-group">
-          <label for="paper-title" class="form-label"> Paper Title </label>
-          <input
-            id="paper-title"
-            type="text"
-            bind:value={title}
-            placeholder="Enter a title for your paper"
-            class="form-input"
-            disabled={saving || publishing}
-          />
-          {#if error}
-            <p class="form-error">{error}</p>
-          {/if}
+          <div class="form-group">
+            <label for="paper-title" class="form-label"> Paper Title </label>
+            <input
+              id="paper-title"
+              type="text"
+              bind:value={title}
+              placeholder="Enter a title for your paper"
+              class="form-input"
+              disabled={saving || publishing}
+            />
+            {#if error}
+              <p class="form-error">{error}</p>
+            {/if}
+          </div>
         </div>
 
-        <div style="display: flex; gap: 0.75rem;">
+        <div class="modal-footer">
           <button
             onclick={handleSaveDraft}
             disabled={saving || publishing}
             class="editor-btn"
-            style="flex: 1; justify-content: center;"
           >
             {#if saving}
               <Loader size={16} class="animate-spin" />
@@ -160,7 +163,6 @@
             onclick={handlePublish}
             disabled={saving || publishing}
             class="editor-btn editor-btn-primary"
-            style="flex: 1; justify-content: center;"
           >
             {#if publishing}
               <Loader size={16} class="animate-spin" />
@@ -169,16 +171,14 @@
               Publish to IPFS
             {/if}
           </button>
+          <button
+            onclick={resetOnClose}
+            disabled={saving || publishing}
+            class="editor-btn"
+          >
+            Cancel
+          </button>
         </div>
-
-        <button
-          onclick={resetOnClose}
-          disabled={saving || publishing}
-          class="editor-btn"
-          style="width: 100%; margin-top: 0.75rem; color: var(--text-secondary); justify-content: center;"
-        >
-          Cancel
-        </button>
       {/if}
     </div>
   </div>
