@@ -186,5 +186,6 @@
     line-height: 1.6;
     color: var(--text);
     margin: 0;
+    white-space: pre-line;
   }
 </style>

@@ -318,10 +318,6 @@
   background: var(--hover);
 }
 
-.modal-footer .editor-btn {
-  min-width: 5rem;
-}
-
 .form-group {
   margin-bottom: 0;
 }

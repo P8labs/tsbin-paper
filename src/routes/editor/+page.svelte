@@ -385,9 +385,9 @@ console.log("Beautiful code");
 
       currentPaperId = paperId;
       showAlertDialog(
-        "Paper published to IPFS successfully!",
+        `Paper published to IPFS successfully!\n cid: ${cid}`,
         "success",
-        `Visit Published Paper (cid ${cid})`,
+        `Visit Published Paper `,
         `https://ipfs.io/ipfs/${cid}`,
       );
     } catch (error: any) {
