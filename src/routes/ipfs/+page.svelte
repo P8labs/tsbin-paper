@@ -119,7 +119,9 @@
         <h1>IPFS Gateway Status</h1>
         <p class="info-text">
           Check the availability of any IPFS content across multiple gateways.
-          Works with any CID, regardless of where it was published.
+          Works with any CID, regardless of where it was published. Checking
+          multiple gateways helps propagate your content across the IPFS
+          network, making it more accessible and resilient.
         </p>
         <p class="cid-display">
           <span class="cid-label">CID:</span>
@@ -232,6 +234,24 @@
                   </div>
                 </div>
                 <code class="url-text">{gateway.subdomainUrl}</code>
+              </div>
+            {:else if gateway.status === "offline"}
+              <div class="offline-note">
+                <p>
+                  This gateway is currently offline or hasn't cached this
+                  content yet.
+                </p>
+                <p>
+                  <a
+                    href={gateway.pathUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="offline-link"
+                  >
+                    <ExternalLink size={14} />
+                    Try visiting anyway
+                  </a> — This might trigger content propagation to this gateway.
+                </p>
               </div>
             {/if}
           </div>
@@ -571,6 +591,37 @@
     color: var(--text);
     word-break: break-all;
     border: 1px solid var(--divider);
+  }
+
+  .offline-note {
+    padding: 0.75rem 0;
+  }
+
+  .offline-note p {
+    font-size: 0.8125rem;
+    color: var(--text);
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .offline-note p:last-child {
+    margin-bottom: 0;
+  }
+
+  .offline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+
+  .offline-link:hover {
+    border-bottom-color: var(--text);
   }
 
   @media (max-width: 768px) {
