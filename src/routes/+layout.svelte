@@ -1,7 +1,6 @@
 <script lang="ts">
   import { dev } from "$app/environment";
   import { page } from "$app/state";
-  import { injectAnalytics } from "@vercel/analytics/sveltekit";
   import moment from "moment";
   import "./layout.css";
 
@@ -10,7 +9,6 @@
   const isEditorPages = $derived(
     ["/editor", "/profile"].includes(page.route.id!),
   );
-  injectAnalytics({ mode: dev ? "development" : "production" });
 
   const buildTime =
     import.meta.env.PUBLIC_BUILD_TIME || new Date().toISOString();

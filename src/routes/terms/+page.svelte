@@ -78,17 +78,14 @@
       <p>Do not publish anything you do not want to be public.</p>
 
       <h3>Analytics</h3>
-      <p>We use analytics only to:</p>
+      <p>We do not use any analytics or tracking tools.</p>
+      <p>We do not track or monitor:</p>
       <ul>
-        <li>Count page visits</li>
-        <li>Monitor basic performance</li>
-        <li>Keep the service healthy</li>
-      </ul>
-      <p>We do not track:</p>
-      <ul>
+        <li>Page visits</li>
         <li>What you type</li>
         <li>What you export</li>
         <li>What you publish</li>
+        <li>Your browsing behavior</li>
       </ul>
     </section>
 
