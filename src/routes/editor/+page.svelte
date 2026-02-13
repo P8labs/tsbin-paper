@@ -388,7 +388,7 @@ console.log("Beautiful code");
         `Paper published to IPFS successfully!`,
         "success",
         `View on IPFS`,
-        `/ipfs/${cid}`,
+        `/ipfs?cid=${cid}`,
       );
     } catch (error: any) {
       throw new Error(error.message || "Failed to publish");

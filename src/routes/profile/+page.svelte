@@ -233,7 +233,7 @@
                         <code class="ipfs-cid-code">{paper.ipfsCid}</code>
                       </div>
                       <div class="ipfs-actions">
-                        <a href="/ipfs/{paper.ipfsCid}" class="ipfs-link">
+                        <a href="/ipfs?cid={paper.ipfsCid}" class="ipfs-link">
                           <ExternalLink size={14} />
                           View Published Paper
                         </a>
@@ -271,7 +271,7 @@
                   </button>
                 {:else}
                   <a
-                    href="/ipfs/{paper.ipfsCid}"
+                    href="/ipfs?cid={paper.ipfsCid}"
                     class="paper-action-btn view"
                     title="View Published"
                   >
