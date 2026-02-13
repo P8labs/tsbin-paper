@@ -3,8 +3,16 @@
   import { goto } from "$app/navigation";
   import { authStore } from "$lib/stores/auth";
   import { papersStore, type Paper } from "$lib/stores/papers";
-  import { Trash2, Edit, ExternalLink, FileText, Loader } from "lucide-svelte";
+  import {
+    Trash2,
+    Edit,
+    ExternalLink,
+    FileText,
+    Loader,
+    Info,
+  } from "lucide-svelte";
   import ConfirmDialog from "$lib/components/editor/ConfirmDialog.svelte";
+  import IPFSGatewayModal from "$lib/components/editor/IPFSGatewayModal.svelte";
   import moment from "moment";
   import "./profile.css";
 
@@ -14,6 +22,15 @@
   let filter = $state<"all" | "published" | "draft">("all");
   let showConfirmDialog = $state(false);
   let paperToDelete = $state<Paper | null>(null);
+  let showGatewayModal = $state(false);
+  let selectedCid = $state("");
+
+  const ipfsGateways = [
+    "https://ipfs.io/ipfs/",
+    "https://cloudflare-ipfs.com/ipfs/",
+    "https://gateway.pinata.cloud/ipfs/",
+    "https://dweb.link/ipfs/",
+  ];
 
   onMount(() => {
     authStore.init();
@@ -60,6 +77,11 @@
     } catch (error) {
       console.error("Failed to delete paper:", error);
     }
+  }
+
+  function showGatewayInfo(cid: string) {
+    selectedCid = cid;
+    showGatewayModal = true;
   }
 </script>
 
@@ -210,15 +232,20 @@
                         <span class="ipfs-cid-label">IPFS CID:</span>
                         <code class="ipfs-cid-code">{paper.ipfsCid}</code>
                       </div>
-                      <a
-                        href={paper.ipfsGateway}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="ipfs-link"
-                      >
-                        <ExternalLink size={14} />
-                        View Published Paper on IPFS
-                      </a>
+                      <div class="ipfs-actions">
+                        <a href="/ipfs/{paper.ipfsCid}" class="ipfs-link">
+                          <ExternalLink size={14} />
+                          View Published Paper
+                        </a>
+                        <button
+                          onclick={() => showGatewayInfo(paper.ipfsCid!)}
+                          class="ipfs-gateway-btn"
+                          title="View alternative gateways"
+                        >
+                          <Info size={14} />
+                          Gateways
+                        </button>
+                      </div>
                     </div>
                   </div>
                 {/if}
@@ -244,9 +271,7 @@
                   </button>
                 {:else}
                   <a
-                    href={paper.ipfsGateway}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/ipfs/{paper.ipfsCid}"
                     class="paper-action-btn view"
                     title="View Published"
                   >
@@ -271,5 +296,11 @@
     onCancel={() => {
       paperToDelete = null;
     }}
+  />
+
+  <IPFSGatewayModal
+    bind:show={showGatewayModal}
+    cid={selectedCid}
+    gateways={ipfsGateways}
   />
 </main>

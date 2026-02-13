@@ -385,10 +385,10 @@ console.log("Beautiful code");
 
       currentPaperId = paperId;
       showAlertDialog(
-        `Paper published to IPFS successfully!\n cid: ${cid}`,
+        `Paper published to IPFS successfully!`,
         "success",
-        `Visit Published Paper `,
-        `https://ipfs.io/ipfs/${cid}`,
+        `View on IPFS`,
+        `/ipfs/${cid}`,
       );
     } catch (error: any) {
       throw new Error(error.message || "Failed to publish");

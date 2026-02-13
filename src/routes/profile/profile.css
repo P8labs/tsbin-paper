@@ -240,6 +240,13 @@
   font-size: 0.625rem;
 }
 
+.ipfs-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .ipfs-link {
   display: inline-flex;
   align-items: center;
@@ -255,6 +262,26 @@
   color: #1d4ed8;
 }
 
+.ipfs-gateway-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--divider);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ipfs-gateway-btn:hover {
+  background: var(--hover);
+  border-color: var(--text);
+  opacity: 0.8;
+}
+
 .paper-updated {
   display: flex;
   align-items: center;
@@ -265,7 +292,6 @@
   margin-top: 1rem;
 }
 
-/* Paper Actions */
 .paper-actions {
   display: flex;
   gap: 0.5rem;

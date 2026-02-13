@@ -364,9 +364,8 @@
   font-weight: 500;
 }
 
-/* Alert styles */
 .alert {
-  max-width: 28rem;
+  max-width: 36rem;
 }
 
 .alert-content {

@@ -149,6 +149,7 @@
     display: flex;
     align-items: flex-start;
     gap: 1rem;
+    width: 100%;
   }
 
   .alert-icon {
