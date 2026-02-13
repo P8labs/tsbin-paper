@@ -3,50 +3,41 @@
   import { goto } from "$app/navigation";
   import { authStore } from "$lib/stores/auth";
   import { papersStore, type Paper } from "$lib/stores/papers";
-  import {
-    Trash2,
-    Edit,
-    ExternalLink,
-    FileText,
-    Loader,
-    Info,
-  } from "lucide-svelte";
+  import { Trash2, Edit, ExternalLink, FileText, Loader } from "lucide-svelte";
   import ConfirmDialog from "$lib/components/editor/ConfirmDialog.svelte";
-  import IPFSGatewayModal from "$lib/components/editor/IPFSGatewayModal.svelte";
   import moment from "moment";
   import "./profile.css";
 
   let user = $state<any>(null);
   let papers = $state<Paper[]>([]);
   let loading = $state(true);
+  let authLoading = $state(true);
+  let papersLoading = $state(false);
   let filter = $state<"all" | "published" | "draft">("all");
   let showConfirmDialog = $state(false);
   let paperToDelete = $state<Paper | null>(null);
-  let showGatewayModal = $state(false);
-  let selectedCid = $state("");
 
-  const ipfsGateways = [
-    "https://ipfs.io/ipfs/",
-    "https://cloudflare-ipfs.com/ipfs/",
-    "https://gateway.pinata.cloud/ipfs/",
-    "https://dweb.link/ipfs/",
-  ];
+  $effect(() => {
+    loading = authLoading || papersLoading;
+  });
 
   onMount(() => {
     authStore.init();
 
     const unsubscribe = authStore.subscribe((state) => {
       user = state.user;
+      authLoading = state.loading;
+
       if (!state.loading && !state.user) {
         goto("/");
-      } else if (state.user) {
+      } else if (state.user && !papersLoading && papers.length === 0) {
         papersStore.loadUserPapers(state.user.$id);
       }
     });
 
     const unsubscribePapers = papersStore.subscribe((state) => {
       papers = state.papers;
-      loading = state.loading;
+      papersLoading = state.loading;
     });
 
     return () => {
@@ -78,11 +69,6 @@
       console.error("Failed to delete paper:", error);
     }
   }
-
-  function showGatewayInfo(cid: string) {
-    selectedCid = cid;
-    showGatewayModal = true;
-  }
 </script>
 
 <svelte:head>
@@ -91,18 +77,20 @@
 
 <div class="bg-effect"></div>
 
-<header class="profile-header-nav">
-  <a href="/" class="profile-header-logo">PAPER</a>
-  <nav class="profile-header-links">
-    <a href="/editor">editor</a>
-    <a href="/about">about</a>
-    <a href="/terms">terms</a>
-    <a
-      href="https://github.com/P8labs/tsbin-paper"
-      target="_blank"
-      rel="noopener">github</a
-    >
-  </nav>
+<header>
+  <div class="container">
+    <a href="/" class="logo">PAPER</a>
+    <nav>
+      <a href="/editor">editor</a>
+      <a href="/about">about</a>
+      <a href="/terms">terms</a>
+      <a
+        href="https://github.com/P8labs/tsbin-paper"
+        target="_blank"
+        rel="noopener">github</a
+      >
+    </nav>
+  </div>
 </header>
 
 <main>
@@ -139,6 +127,7 @@
     {#if loading}
       <div class="loading-state">
         <Loader size={32} style="animation: spin 1s linear infinite;" />
+        <p>Loading your papers...</p>
       </div>
     {:else if filteredPapers.length === 0}
       <div class="empty-state">
@@ -227,26 +216,12 @@
                 {/if}
                 {#if paper.ipfsCid}
                   <div class="ipfs-info">
-                    <div class="ipfs-info-content">
-                      <div class="ipfs-cid-row">
-                        <span class="ipfs-cid-label">IPFS CID:</span>
-                        <code class="ipfs-cid-code">{paper.ipfsCid}</code>
-                      </div>
-                      <div class="ipfs-actions">
-                        <a href="/ipfs?cid={paper.ipfsCid}" class="ipfs-link">
-                          <ExternalLink size={14} />
-                          View Published Paper
-                        </a>
-                        <button
-                          onclick={() => showGatewayInfo(paper.ipfsCid!)}
-                          class="ipfs-gateway-btn"
-                          title="View alternative gateways"
-                        >
-                          <Info size={14} />
-                          Gateways
-                        </button>
-                      </div>
-                    </div>
+                    <span class="ipfs-label">IPFS CID:</span>
+                    <code class="ipfs-cid">{paper.ipfsCid}</code>
+                    <a href="/ipfs?cid={paper.ipfsCid}" class="ipfs-link">
+                      <ExternalLink size={14} />
+                      View on IPFS
+                    </a>
                   </div>
                 {/if}
                 <div class="paper-updated">
@@ -296,11 +271,5 @@
     onCancel={() => {
       paperToDelete = null;
     }}
-  />
-
-  <IPFSGatewayModal
-    bind:show={showGatewayModal}
-    cid={selectedCid}
-    gateways={ipfsGateways}
   />
 </main>
