@@ -14,6 +14,7 @@
     onThemeChange: (theme: string) => void;
     onWatermarkToggle: (value: boolean) => void;
     onExportPNG: () => void;
+    onExportPDF: () => void;
     onExportHTML: () => void;
     onExportMarkdown: () => void;
     onPublish: () => void;
@@ -31,6 +32,7 @@
     onThemeChange,
     onWatermarkToggle,
     onExportPNG,
+    onExportPDF,
     onExportHTML,
     onExportMarkdown,
     onPublish,
@@ -122,7 +124,12 @@
       {/if}
     </div>
 
-    <ExportDropdown {onExportPNG} {onExportHTML} {onExportMarkdown} />
+    <ExportDropdown
+      {onExportPNG}
+      {onExportPDF}
+      {onExportHTML}
+      {onExportMarkdown}
+    />
 
     {#if user}
       <button onclick={onNewPaper} class="editor-btn" title="New Paper">

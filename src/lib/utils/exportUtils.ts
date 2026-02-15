@@ -1,4 +1,5 @@
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { getFontFamily } from "$lib/config/fonts";
 import { getThemeStyles, type ThemeConfig } from "$lib/config/themes";
 
@@ -81,7 +82,95 @@ export async function exportToPNG(
       element.style.wordBreak = "";
     });
 
-    // Remove watermark if added
+    if (watermark && watermark.parentNode) {
+      watermark.parentNode.removeChild(watermark);
+    }
+  }
+}
+
+export async function exportToPDF(
+  elementId: string,
+  backgroundColor: string,
+  includeWatermark: boolean = true,
+  theme?: ThemeConfig,
+) {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+
+  const codeBlocks = element.querySelectorAll("pre");
+  const originalStyles: { element: HTMLElement; overflow: string }[] = [];
+
+  codeBlocks.forEach((pre) => {
+    const htmlPre = pre as HTMLElement;
+    originalStyles.push({ element: htmlPre, overflow: htmlPre.style.overflow });
+    htmlPre.style.overflow = "visible";
+    htmlPre.style.whiteSpace = "pre-wrap";
+    htmlPre.style.wordBreak = "break-word";
+  });
+
+  let watermark: HTMLElement | null = null;
+  if (includeWatermark && theme) {
+    const isDarkTheme = theme.backgroundColor.startsWith("#")
+      ? parseInt(theme.backgroundColor.slice(1, 3), 16) < 128
+      : theme.id.includes("dark") ||
+        theme.id.includes("terminal") ||
+        theme.id.includes("sepia") ||
+        theme.id.includes("nord");
+    const watermarkColor = isDarkTheme
+      ? "rgba(255, 255, 255, 0.3)"
+      : "rgba(0, 0, 0, 0.3)";
+
+    watermark = document.createElement("div");
+    watermark.style.cssText = `position: absolute; bottom: 8px; right: 12px; font-size: 10px; color: ${watermarkColor}; pointer-events: none; font-family: system-ui, -apple-system, sans-serif;`;
+    watermark.innerHTML =
+      'rendered by <a href="https://paper.tsbin.tech" style="color: inherit; text-decoration: none;">paper.tsbin.tech</a>';
+
+    const originalPosition = element.style.position;
+    if (!originalPosition || originalPosition === "static") {
+      element.style.position = "relative";
+    }
+    element.appendChild(watermark);
+  }
+
+  try {
+    const canvas = await html2canvas(element, {
+      backgroundColor,
+      scale: 2,
+      logging: false,
+      allowTaint: true,
+      useCORS: true,
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const imgWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(`paper-${Date.now()}.pdf`);
+  } catch (err) {
+    console.error("PDF export failed:", err);
+    throw err;
+  } finally {
+    originalStyles.forEach(({ element, overflow }) => {
+      element.style.overflow = overflow;
+      element.style.whiteSpace = "";
+      element.style.wordBreak = "";
+    });
+
     if (watermark && watermark.parentNode) {
       watermark.parentNode.removeChild(watermark);
     }

@@ -16,6 +16,7 @@
   import { getGoogleFontsUrl } from "$lib/config/fonts";
   import {
     exportToPNG,
+    exportToPDF,
     createHTMLExport,
     downloadFile,
   } from "$lib/utils/exportUtils";
@@ -265,6 +266,25 @@ console.log("Beautiful code");
     }
   }
 
+  async function handleExportPDF() {
+    if (!browser) return;
+    const theme = getThemeById(previewTheme);
+    try {
+      await exportToPDF(
+        "preview-card",
+        theme?.backgroundColor || "#ffffff",
+        includeWatermark,
+        theme || undefined,
+      );
+      showAlertDialog("PDF exported successfully!", "success");
+    } catch (err) {
+      showAlertDialog(
+        "Export failed: The content is too large. Try reducing the content or exporting to HTML instead.",
+        "error",
+      );
+    }
+  }
+
   function handleExportHTML() {
     const theme = getThemeById(previewTheme);
     if (!theme) return;
@@ -370,18 +390,13 @@ console.log("Beautiful code");
         includeWatermark,
       );
 
-      const { cid, gateway, paperId } = await publishToIPFS(
-        html,
-        title,
-        user.$id,
-        {
-          content: markdown,
-          theme: previewTheme,
-          font: previewFont,
-          watermark: includeWatermark,
-          ...(currentPaperId && { paperId: currentPaperId }),
-        },
-      );
+      const { cid, paperId } = await publishToIPFS(html, title, user.$id, {
+        content: markdown,
+        theme: previewTheme,
+        font: previewFont,
+        watermark: includeWatermark,
+        ...(currentPaperId && { paperId: currentPaperId }),
+      });
 
       currentPaperId = paperId;
       showAlertDialog(
@@ -423,6 +438,7 @@ console.log("Beautiful code");
       includeWatermark = value;
     }}
     onExportPNG={handleExportPNG}
+    onExportPDF={handleExportPDF}
     onExportHTML={handleExportHTML}
     onExportMarkdown={handleExportMarkdown}
     onPublish={() => (showPublishModal = true)}

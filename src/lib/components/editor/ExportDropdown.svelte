@@ -5,10 +5,12 @@
     onExportPNG,
     onExportHTML,
     onExportMarkdown,
+    onExportPDF,
   }: {
     onExportPNG: () => void;
     onExportHTML: () => void;
     onExportMarkdown: () => void;
+    onExportPDF: () => void;
   } = $props();
 
   let isOpen = $state(false);
@@ -33,6 +35,9 @@
       <div class="dropdown-section">
         <button onclick={() => handleExport(onExportPNG)} class="dropdown-item">
           PNG
+        </button>
+        <button onclick={() => handleExport(onExportPDF)} class="dropdown-item">
+          PDF
         </button>
         <button
           onclick={() => handleExport(onExportHTML)}
